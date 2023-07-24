@@ -19,6 +19,7 @@ This command will download the  necessary dependencies and  will run 19 integrat
 **Step 3:**
 Run the application:
 >mvn spring-boot:run
+
 By default spring boot runs in port 8080. If you want to change the port open application.properties and add property server.port = your system port
 This command will start the spring boot application and we can do crud operations with phone directory.
 
