@@ -7,6 +7,7 @@ Clone the application to local system and open with IDE like Eclipse or Intellij
 In application.properties
 
 change the username and password to send the contact details to your email id.
+
 spring.mail.username=nareshkumarkakollu3456@gmail.com
 spring.mail.password=************
 
