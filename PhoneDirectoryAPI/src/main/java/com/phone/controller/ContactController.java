@@ -2,6 +2,9 @@ package com.phone.controller;
 
 import com.phone.entities.Contact;
 import com.phone.service.IContactService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(value = "Contact Rest Controller", description = "REST API for Contact")
 @RestController
 @RequestMapping("/contact")
 public class ContactController {
