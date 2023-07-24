@@ -1,7 +1,7 @@
 # Instructions
 
 **Step 1:**
-Clone the application from github to local system, extract the zip and open with IDE like Eclipse or Intellij
+Clone the application from github to local system, extract the project zip and open with IDE like Eclipse or Intellij
 Github: https://github.com/kakollunareshkumar/PhoneDirectory
 
 **Step 2:**
