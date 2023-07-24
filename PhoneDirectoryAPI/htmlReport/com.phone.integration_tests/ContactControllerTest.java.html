@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in PhoneDirectoryAPI Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.phone.integration_tests</a> &gt; <span class="el_source">ContactControllerTest.java</span></div><h1>ContactControllerTest.java</h1><pre class="source lang-java linenums">package com.phone.integration_tests;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.phone.controller.ContactController;
+import com.phone.entities.Contact;
+import com.phone.service.IContactService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+
+
+@WebMvcTest(ContactController.class)
+<span class="nc" id="L31">public class ContactControllerTest {</span>
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private IContactService iContactService;
+
+    private List&lt;Contact&gt; contacts;
+    private ObjectMapper objectMapper;
+
+    private Contact contact1;
+    private  Contact contact2;
+
+    private Contact contact3;
+
+    @BeforeEach
+    void setUp() {
+
+<span class="nc" id="L50">     contact1 =  new Contact(1L,&quot;naresh&quot;,&quot;8985946956&quot;,&quot;naresh3456@gmail.com&quot;);</span>
+<span class="nc" id="L51">            contact2 = new Contact(2L,&quot;suresh&quot;,&quot;7406283281&quot;,&quot;suresh3456@gmail.com&quot;);</span>
+<span class="nc" id="L52">                contact3 = new Contact(4L,&quot;suresh&quot;,&quot;9405354299&quot;,&quot;sureshkakollu3456@gmail.com&quot;);</span>
+        // Initialize test data before each test
+<span class="nc" id="L54">        contacts = Arrays.asList(</span>
+                 contact1,contact2,contact3
+        );
+
+<span class="nc" id="L58">        objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L59">    }</span>
+
+    @Test
+    public void getAllContactsTest() throws Exception {
+        // Arrange
+<span class="nc" id="L64">        when(iContactService.getAllContacts()).thenReturn(contacts);</span>
+
+        // Act &amp; Assert
+<span class="nc" id="L67">        mockMvc.perform(get(&quot;/contact/all&quot;))</span>
+<span class="nc" id="L68">                .andExpect(status().isOk())</span>
+<span class="nc" id="L69">                .andExpect(content().contentType(MediaType.APPLICATION_JSON))</span>
+<span class="nc" id="L70">                .andExpect(jsonPath(&quot;$.length()&quot;).value(3))</span>
+<span class="nc" id="L71">                .andExpect(jsonPath(&quot;$[0].name&quot;).value(&quot;naresh&quot;))</span>
+<span class="nc" id="L72">                .andExpect(jsonPath(&quot;$[1].name&quot;).value(&quot;suresh&quot;));</span>
+
+        // Verify that the iContactService.getAllContacts() method is called only once
+<span class="nc" id="L75">        verify(iContactService, times(1)).getAllContacts();</span>
+<span class="nc" id="L76">    }</span>
+
+    @Test
+    public void addContactTest() throws Exception {
+        // Arrange
+<span class="nc" id="L81">        Contact newContact = new Contact(4L, &quot;harsha&quot;, &quot;9402681156&quot;, &quot;harsha3456@gmail.com&quot;);</span>
+<span class="nc" id="L82">        when(iContactService.addContact(any(Contact.class))).thenReturn(newContact);</span>
+
+        // Act
+<span class="nc" id="L85">        MvcResult result = mockMvc.perform(post(&quot;/contact/add&quot;)</span>
+<span class="nc" id="L86">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L87">                        .content(objectMapper.writeValueAsString(newContact)))</span>
+<span class="nc" id="L88">                .andExpect(status().isAccepted())</span>
+<span class="nc" id="L89">                .andReturn();</span>
+
+        // Assert
+<span class="nc" id="L92">        String content = result.getResponse().getContentAsString();</span>
+<span class="nc" id="L93">        assertEquals(objectMapper.writeValueAsString(newContact), content);</span>
+
+        // Verify that the iContactService.addContact() method is called only once with the correct parameter
+<span class="nc" id="L96">        verify(iContactService, times(1)).addContact(any(Contact.class));</span>
+<span class="nc" id="L97">    }</span>
+
+    @Test
+    public void getAllContactsByNameTest() throws Exception {
+        // Arrange
+<span class="nc" id="L102">        String name = &quot;suresh&quot;;</span>
+<span class="nc" id="L103">        Contact contact1 = contact2;</span>
+<span class="nc" id="L104">        Contact contact2 = contact3;</span>
+<span class="nc" id="L105">        List&lt;Contact&gt; contacts = Arrays.asList(contact1, contact2);</span>
+<span class="nc" id="L106">        when(iContactService.getContactsByName(name)).thenReturn(contacts);</span>
+
+        // Act
+<span class="nc" id="L109">        MvcResult result = mockMvc.perform(get(&quot;/contact/all/{name}&quot;, name))</span>
+<span class="nc" id="L110">                .andExpect(status().isOk())</span>
+<span class="nc" id="L111">                .andExpect(content().contentType(MediaType.APPLICATION_JSON))</span>
+<span class="nc" id="L112">                .andReturn();</span>
+
+        // Assert
+<span class="nc" id="L115">        String content = result.getResponse().getContentAsString();</span>
+<span class="nc" id="L116">        List&lt;Contact&gt; responseContacts = objectMapper.readValue(content, new TypeReference&lt;List&lt;Contact&gt;&gt;() {});</span>
+
+<span class="nc" id="L118">        assertEquals(contacts.size(), responseContacts.size());</span>
+<span class="nc" id="L119">        assertEquals(contacts.get(0).getName(), responseContacts.get(0).getName());</span>
+<span class="nc" id="L120">        assertEquals(contacts.get(1).getName(), responseContacts.get(1).getName());</span>
+
+        // Verify that the iContactService.getContactsByName() method is called only once with the correct parameter
+<span class="nc" id="L123">        verify(iContactService, times(1)).getContactsByName(name);</span>
+<span class="nc" id="L124">    }</span>
+
+
+
+
+    @Test
+    public void updateContactTest() throws Exception {
+        // Arrange
+<span class="nc" id="L132">        Long contactId = 1L;</span>
+<span class="nc" id="L133">        Contact updatedContact = new Contact(contactId, &quot;uday&quot;, &quot;9886157285&quot;, &quot;uday3456@gmail.com&quot;);</span>
+<span class="nc" id="L134">        when(iContactService.updateContact(contactId, updatedContact)).thenReturn(updatedContact);</span>
+
+        // Act
+<span class="nc" id="L137">        MvcResult result = mockMvc.perform(put(&quot;/contact/update/{id}&quot;, contactId)</span>
+<span class="nc" id="L138">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="nc" id="L139">                        .accept(MediaType.APPLICATION_JSON) // Set the Accept header to accept JSON response</span>
+<span class="nc" id="L140">                        .content(objectMapper.writeValueAsString(updatedContact)))</span>
+<span class="nc" id="L141">                .andExpect(status().isOk())</span>
+<span class="nc" id="L142">                .andExpect(content().contentType(MediaType.APPLICATION_JSON))</span>
+<span class="nc" id="L143">                .andReturn();</span>
+
+        // Assert
+<span class="nc" id="L146">        String content = result.getResponse().getContentAsString();</span>
+<span class="nc" id="L147">        Contact responseContact = objectMapper.readValue(content, Contact.class);</span>
+<span class="nc" id="L148">        assertEquals(updatedContact.getName(), responseContact.getName());</span>
+<span class="nc" id="L149">        assertEquals(updatedContact.getPhoneNumber(), responseContact.getPhoneNumber());</span>
+<span class="nc" id="L150">        assertEquals(updatedContact.getEmail(), responseContact.getEmail());</span>
+
+        // Verify that the iContactService.updateContact() method is called only once with the correct parameters
+<span class="nc" id="L153">        verify(iContactService, times(1)).updateContact(contactId, updatedContact);</span>
+<span class="nc" id="L154">    }</span>
+
+
+    @Test
+    public void deleteContactTest() throws Exception {
+        // Arrange
+<span class="nc" id="L160">        Long contactId = 1L;</span>
+
+        // Act &amp; Assert
+<span class="nc" id="L163">        mockMvc.perform(MockMvcRequestBuilders.delete(&quot;/contact/{id}&quot;, contactId)</span>
+<span class="nc" id="L164">                        .contentType(MediaType.APPLICATION_JSON))</span>
+<span class="nc" id="L165">                .andExpect(MockMvcResultMatchers.status().isOk());</span>
+
+        // Verify that the iContactService.deleteContact() method is called once with the correct contact ID
+<span class="nc" id="L168">        verify(iContactService, times(1)).deleteContact(contactId);</span>
+<span class="nc" id="L169">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

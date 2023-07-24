@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in PhoneDirectoryAPI Coverage Results</a> &gt; <a href="index.source.html" class="el_package">com.phone.controller</a> &gt; <span class="el_source">ContactController.java</span></div><h1>ContactController.java</h1><pre class="source lang-java linenums">package com.phone.controller;
+
+import com.phone.entities.Contact;
+import com.phone.service.IContactService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/contact&quot;)
+<span class="fc" id="L15">public class ContactController {</span>
+    @Autowired
+    private IContactService iContactService;
+
+/*
+   Contact addContact(Contact contact);
+    Contact updateContact(Contact contact);
+
+    void deleteContact(Long contactId);
+    List&lt;Contact&gt; getAllContacts();
+
+    List&lt;Contact&gt;  getContactsByName(String name);
+
+ */
+
+   @PostMapping(&quot;/add&quot;)
+   public  ResponseEntity&lt;Contact&gt; addContact(@RequestBody @Valid Contact contact){
+
+<span class="fc" id="L33">       Contact addedContact = iContactService.addContact(contact);</span>
+
+<span class="fc" id="L35">       return  new ResponseEntity&lt;&gt;(addedContact, HttpStatus.ACCEPTED);</span>
+   }
+
+    @PutMapping(&quot;/update/{id}&quot;)
+    public  ResponseEntity&lt;Contact&gt; updateContact(@PathVariable(&quot;id&quot;) Long id,@RequestBody @Valid Contact contact){
+
+<span class="fc" id="L41">        Contact updatedContact = iContactService.updateContact(id,contact);</span>
+
+<span class="fc" id="L43">        return  new ResponseEntity&lt;&gt;(updatedContact, HttpStatus.OK);</span>
+    }
+
+    @DeleteMapping(&quot;{id}&quot;)
+    public  ResponseEntity&lt;String&gt; deleteContact(@PathVariable(&quot;id&quot;) Long contactId){
+
+<span class="fc" id="L49">             iContactService.deleteContact(contactId);</span>
+
+<span class="fc" id="L51">        return  new ResponseEntity&lt;&gt;(&quot;contact deleted successfully&quot;, HttpStatus.OK);</span>
+    }
+    @GetMapping(&quot;/all&quot;)
+    public  ResponseEntity&lt;List&lt;Contact&gt;&gt; getAllContacts(){
+
+<span class="fc" id="L56">       List&lt;Contact&gt; allContacts =  iContactService.getAllContacts();</span>
+
+<span class="fc" id="L58">        return  new ResponseEntity&lt;&gt;(allContacts, HttpStatus.OK);</span>
+    }
+
+    @GetMapping(&quot;/all/{name}&quot;)
+    public  ResponseEntity&lt;List&lt;Contact&gt;&gt; getAllContactsByName(@PathVariable (&quot;name&quot;) String name){
+
+<span class="fc" id="L64">        List&lt;Contact&gt; allContactsByName =  iContactService.getContactsByName(name);</span>
+
+<span class="fc" id="L66">        return  new ResponseEntity&lt;&gt;(allContactsByName, HttpStatus.OK);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
