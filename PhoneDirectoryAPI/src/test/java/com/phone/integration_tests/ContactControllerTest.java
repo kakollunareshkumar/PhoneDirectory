@@ -47,9 +47,9 @@ public class ContactControllerTest {
     @BeforeEach
     void setUp() {
 
-     contact1 =  new Contact(1L,"naresh","8985946956","naresh3456@gmail.com");
-            contact2 = new Contact(2L,"suresh","7406283281","suresh3456@gmail.com");
-                contact3 = new Contact(4L,"suresh","9405354299","sureshkakollu3456@gmail.com");
+     contact1 =  new Contact(1L,"naresh","1122334455","naresh3456@gmail.com");
+            contact2 = new Contact(2L,"suresh","2233445566","suresh3456@gmail.com");
+                contact3 = new Contact(4L,"suresh","3344556677","sureshkakollu3456@gmail.com");
         // Initialize test data before each test
         contacts = Arrays.asList(
                  contact1,contact2,contact3
