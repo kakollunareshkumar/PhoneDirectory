@@ -130,7 +130,7 @@ public class ContactControllerTest {
     public void updateContactTest() throws Exception {
         // Arrange
         Long contactId = 1L;
-        Contact updatedContact = new Contact(contactId, "uday", "9886157285", "uday3456@gmail.com");
+        Contact updatedContact = new Contact(contactId, "uday", "1234567890", "uday3456@gmail.com");
         when(iContactService.updateContact(contactId, updatedContact)).thenReturn(updatedContact);
 
         // Act
