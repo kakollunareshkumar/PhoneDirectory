@@ -40,9 +40,9 @@ public class ContactServiceTest {
     @BeforeEach
     void initializeContactsBeforeEachTest()
     {
-        contact1 = new Contact(1L,"naresh","8985946956","naresh3456@gmail.com");
-        contact2 = new Contact(2L,"suresh","7406283281","suresh3456@gmail.com");
-        contact3 = new Contact(3L,"suresh","9405354299","sureshkakollu3456@gmail.com");
+        contact1 = new Contact(1L,"naresh","1122334455","naresh3456@gmail.com");
+        contact2 = new Contact(2L,"suresh","2233445566","suresh3456@gmail.com");
+        contact3 = new Contact(3L,"suresh","3344556677","sureshkakollu3456@gmail.com");
 
         contacts  = Arrays.asList(contact1,contact2,contact3);
     }
@@ -53,11 +53,11 @@ public class ContactServiceTest {
 
 
         // Mock the behavior of iContactRepository.save() to return the saved Contact
-        Contact savedContact = new Contact(4L, "harsha", "9402681156", "harsha3456.com");
+        Contact savedContact = new Contact(4L, "harsha", "1234567890", "harsha3456.com");
         Mockito.when(iContactRepository.save(savedContact)).thenReturn(savedContact);
 
         // Create the Contact to add
-        Contact contactToAdd = new Contact(4L, "harsha", "9402681156", "harsha3456.com");
+        Contact contactToAdd = new Contact(4L, "harsha", "1234567890", "harsha3456.com");
 
         // Call the method to test
         Contact resultContact = iContactService.addContact(contactToAdd);
@@ -89,7 +89,7 @@ public class ContactServiceTest {
         Mockito.when(iContactRepository.findByPhoneNumber(anyString())).thenReturn(existingContact);
 
         // Create the Contact with duplicate phoneNumber
-        Contact contactToAdd = new Contact(5L, "Jhansi", "7406283281", "jhansi3456@gmail.com");
+        Contact contactToAdd = new Contact(5L, "Jhansi", "1234567890", "jhansi3456@gmail.com");
 
         // Call the method to test and expect a ContactAlreadyExistsException
         assertThrows(ContactAlreadyExistsException.class, () -> iContactService.addContact(contactToAdd));
@@ -196,7 +196,7 @@ public class ContactServiceTest {
         //find all contact names with suresh
         List<Contact> allNamesBysuresh = iContactService.getContactsByName("suresh");
          List<Contact>  expectedNames = Arrays.asList(
-                new Contact(2L,"suresh","7406283281","suresh3456@gmail.com"),
+                new Contact(2L,"suresh","1234567890","suresh3456@gmail.com"),
          new Contact(3L,"suresh","9405354299","sureshkakollu3456@gmail.com")
         );
         //Verify  mock list  suresh with the initial list
